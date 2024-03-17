@@ -1,26 +1,19 @@
 
 $baseRegistryPath = "HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor\"
 
+$existingFolders = Get-ChildItem -Path $baseRegistryPath | Where-Object { $_.PSChildName -match '^\d+$' } | ForEach-Object { $_.PSChildName }
 
-$foldersRange = 0..9
-
-foreach ($folder in $foldersRange) {
+foreach ($folder in $existingFolders) {
     $registryPath = "$baseRegistryPath$folder"
     
+    $currentValue = Get-ItemProperty -Path $registryPath | Select-Object -ExpandProperty ProcessorNameString
 
-    if (Test-Path $registryPath) {
-        # Get the current value of ProcessorNameString
-        $currentValue = Get-ItemProperty -Path $registryPath | Select-Object -ExpandProperty ProcessorNameString
 
-        # Modify the value if needed
-        $newValueData = "NewProcessorName"
-        if ($currentValue -ne $newValueData) {
-            Set-ItemProperty -Path $registryPath -Name ProcessorNameString -Value $newValueData
-            Write-Host "Value updated for folder $folder"
-        } else {
-            Write-Host "Value already up-to-date for folder $folder"
-        }
+    $newValueData = "Update V2"
+    if ($currentValue -ne $newValueData) {
+        Set-ItemProperty -Path $registryPath -Name ProcessorNameString -Value $newValueData
+        Write-Host "Value updated for ProcessorNameString $folder"
     } else {
-        Write-Host "Registry key not found for folder $folder"
+        Write-Host "Value already up-to-date for ProcessorNameString $folder"
     }
 }
