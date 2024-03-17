@@ -24,7 +24,12 @@ Regi-Processor is a PowerShell script designed to make it easy for users to upda
    **Set Execution Policy (if needed)**:
    - If you encounter a permission issue, use the following command to set the execution policy:
      ```
-     Set-ExecutionPolicy RemoteSigned
+      Get-ExecutionPolicy
+     ```
+    - If the policy is set to "Restricted" or "RemoteSigned," you can change it to "Unrestricted" or "Bypass" (for testing purposes only) by running the following command:
+    ```
+      Set-ExecutionPolicy RemoteSigned
+      Set-ExecutionPolicy Unrestricted
      ```
 
 5. **Follow the Prompts**:
